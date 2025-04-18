@@ -10,14 +10,20 @@ from selenium.webdriver.support import expected_conditions as EC
 from pinlun import pinlun
 from sign_in import sign_in
 from open_chrome import open_chorme
-
+from loguru import logger
 
 def input_main(acc):
     #主要输入表单
+    logger.info("开始定位web")
     url = get_target_url()
     driver = open_chorme()
     driver.get(url=url)
+    logger.info(f"访问 ： {driver.title}")
+    
     driver.find_element(By.XPATH,"""/html/body/div[3]/div/div[2]/div[2]/div[2]/span""").click()
+    time.sleep(1)
+
+    driver.find_element(By.XPATH,"""/html/body/a[1]""").click()
     driver.find_element(By.XPATH,"""/html/body/a[1]""").click()
     url = driver.current_url
     driver.find_element(By.XPATH,"""//*[@id="ls_username"]""").send_keys(acc.username)
@@ -31,8 +37,13 @@ def input_main(acc):
     input_box = driver.find_element(By.NAME, "answer")
     input_box.send_keys(acc.question)
     driver.find_element(By.NAME, "loginsubmit").click()
+    logger.success(f"登入成功 {acc.username} ： 【{acc.password}】")
     time.sleep(4)
-    for i in range(3):
-        pinlun(driver=driver, url=url, acc=acc)
     mess = sign_in(driver=driver, url=url)
-    return mess
+    if mess == '今日已签到':
+        return mess
+    else:
+        for i in range(3):
+            pinlun(driver=driver, url=url, acc=acc)
+        mess = sign_in(driver=driver, url=url)
+        return mess

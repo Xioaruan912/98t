@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 # === Telegram Bot Token ===
-bot_token = "token"  # ⚠️ 替换为真实 Token
+bot_token = "7943600651:AAFeACMrH33ggVW7XH_sZDVw7atE4p_lltA"  # ⚠️ 替换为真实 Token
 
 # === 执行日志列表 ===
 execution_logs = []
